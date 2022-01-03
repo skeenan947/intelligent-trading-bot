@@ -72,7 +72,7 @@ There exist also batch scripts for hyper-parameter tuning and signal model gener
 
 The configuration parameters are specified in two files:
 * `service.App.py` in the `config` field of the `App` class
-* `-c config.jsom` argument to the services and scripts. The values from this config file will overwrite those in the `App.config` 
+* `-c config.json` argument to the services and scripts. The values from this config file will overwrite those in the `App.config`
 
 Here are some most important fields:
 * `symbol` it is a trading pair like `BTCUSDT` - it is important for almost all cases
