@@ -75,6 +75,9 @@ The configuration parameters are specified in two files:
 * `-c config.json` argument to the services and scripts. The values from this config file will overwrite those in the `App.config`
 
 Here are some most important fields:
+* `api_key` your Binance API key
+* `api_secret` your Binance API secret key
+* `api_tld` (defaults to .com) top-level domain to use for the API, e.g. `us` for binance.us
 * `symbol` it is a trading pair like `BTCUSDT` - it is important for almost all cases
 * `data_folder` - location of data files which are needed only for batch scripts and not for services
 * `model_folder` - location of trained ML models which are stored by batch scripts and then are loaded by the services

@@ -34,7 +34,7 @@ batch_size = 750
 
 symbols = ["XBTUSD", "ETHUSD", "XRPZ18", "LTCZ18", "EOSZ18", "BCHZ18", "ADAZ18", "TRXZ18"]
 
-App.client = Client(api_key=App.config["api_key"], api_secret=App.config["api_secret"])
+App.client = Client(api_key=App.config["api_key"], api_secret=App.config["api_secret"],tld=App.config["api_tld"],tld=App.config["api_tld"])
 
 
 #
@@ -52,6 +52,7 @@ def main(config_file):
     load_config(config_file)
 
     symbol = App.config["symbol"]
+    tld = App.config["api_tld"]
     freq = "1m"
     save = True
     futures = False
@@ -61,7 +62,7 @@ def main(config_file):
         return
 
     if futures:
-        App.client.API_URL = "https://fapi.binance.com/fapi"
+        App.client.API_URL = "https://api.binance.{tld}/fapi"
         App.client.PRIVATE_API_VERSION = "v1"
         App.client.PUBLIC_API_VERSION = "v1"
 
@@ -199,10 +200,10 @@ def klines_to_df(klines, df):
 #
 
 # !!! DOES NOT WORK - do not use
-async def get_futures_klines_all(symbol, freq, save = False):
+async def get_futures_klines_all(symbol, freq, tld, save = False):
     """
     https://binance-docs.github.io/apidocs/testnet/en/#kline-candlestick-data
-    https://fapi.binance.com - production
+    https://api.binance.com - production
     https://testnet.binancefuture.com - test
     GET /fapi/v1/exchangeInfo: to get a list of symbolc
     GET /fapi/v1/klines: symbol*, interval*, startTime, endTime, limit
@@ -240,7 +241,7 @@ async def get_futures_klines_all(symbol, freq, save = False):
     #
     # Test connection (ping server): GET /fapi/v1/ping
     #
-    url = "https://fapi.binance.com/fapi/v1/exchangeInfo"
+    url = "https://api.binance.{tld}/fapi/v1/exchangeInfo"
     async with aiohttp.ClientSession(headers=headers) as session:
         async with session.get(url, params=params) as response:
             print(response.status)
@@ -264,7 +265,7 @@ async def get_futures_klines_all(symbol, freq, save = False):
         ).hexdigest()
     params["signature"] = signature  # We simply add signature to the parametes
 
-    url = "https://fapi.binance.com/fapi/v1/klines"
+    url = "https://api.binance.{tld}/fapi/v1/klines"
 
     async with aiohttp.ClientSession(headers=headers) as session:
         async with session.get(url, params=params) as response:

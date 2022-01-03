@@ -95,7 +95,7 @@ def start_collector_ws():
     #
     App.analyzer = Analyzer(None)
 
-    App.client = Client(api_key=App.config["api_key"], api_secret=App.config["api_secret"])
+    App.client = Client(api_key=App.config["api_key"], api_secret=App.config["api_secret"],tld=App.config["api_tld"])
 
     #
     # Register websocket listener

@@ -73,7 +73,7 @@ def start_server(config_file):
     #
     # Connect to the server and update/initialize the system state
     #
-    App.client = Client(api_key=App.config["api_key"], api_secret=App.config["api_secret"])
+    App.client = Client(api_key=App.config["api_key"], api_secret=App.config["api_secret"],tld=App.config["api_tld"])
 
     App.analyzer = Analyzer(App.config)
 

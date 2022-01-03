@@ -88,7 +88,7 @@ class App:
         # Binance
         "api_key": "",
         "api_secret": "",
-        "tld": "com",
+        "api_tld": "com",
 
         # Telegram
         "telegram_bot_token": "",
