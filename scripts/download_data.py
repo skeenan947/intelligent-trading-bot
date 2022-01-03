@@ -34,7 +34,7 @@ batch_size = 750
 
 symbols = ["XBTUSD", "ETHUSD", "XRPZ18", "LTCZ18", "EOSZ18", "BCHZ18", "ADAZ18", "TRXZ18"]
 
-App.client = Client(api_key=App.config["api_key"], api_secret=App.config["api_secret"],tld=App.config["api_tld"],tld=App.config["api_tld"])
+App.client = Client(api_key=App.config["api_key"], api_secret=App.config["api_secret"],tld=App.config["api_tld"])
 
 
 #
@@ -43,7 +43,8 @@ App.client = Client(api_key=App.config["api_key"], api_secret=App.config["api_se
 
 @click.command()
 @click.option('--config_file', '-c', type=click.Path(), default='', help='Configuration file name')
-def main(config_file):
+@click.option('--futures', '-f', default=False, help='Download futures data')
+def main(config_file, futures):
     """
     Retrieving historic klines from binance server.
 
@@ -55,7 +56,6 @@ def main(config_file):
     tld = App.config["api_tld"]
     freq = "1m"
     save = True
-    futures = False
     data_path = Path(App.config["data_folder"])
     if not data_path.is_dir():
         print(f"Data folder does not exist: {data_path}")
