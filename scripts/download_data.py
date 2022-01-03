@@ -61,11 +61,6 @@ def main(config_file, futures):
         print(f"Data folder does not exist: {data_path}")
         return
 
-    if futures:
-        App.client.API_URL = "https://api.binance.{tld}/fapi"
-        App.client.PRIVATE_API_VERSION = "v1"
-        App.client.PUBLIC_API_VERSION = "v1"
-
     start_dt = datetime.now()
     print(f"Start downloading klines...")
 
@@ -96,11 +91,15 @@ def main(config_file, futures):
     else:
         print('Downloading %d minutes of new data available for %s, i.e. %d instances of %s data.' % (delta_min, symbol, available_data, freq))
 
+    klines_type=HistoricalKlinesType.SPOT
+    if futures:
+        klines_type=HistoricalKlinesType.FUTURES
     klines = App.client.get_historical_klines(
         symbol,
         freq,
         oldest_point.strftime("%d %b %Y %H:%M:%S"),
-        newest_point.strftime("%d %b %Y %H:%M:%S")
+        newest_point.strftime("%d %b %Y %H:%M:%S"),
+        klines_type=klines_type
     )
 
     data_df = klines_to_df(klines, data_df)
