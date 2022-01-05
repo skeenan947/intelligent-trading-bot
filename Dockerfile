@@ -1,5 +1,4 @@
 FROM tensorflow/tensorflow:2.8.0rc0-gpu-jupyter
-ADD motd /etc/motd
 RUN useradd -ms /bin/bash -G sudo -u 1001 jupyter
 WORKDIR /home/jupyter
 ADD . app
