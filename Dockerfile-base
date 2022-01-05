@@ -1,5 +1,4 @@
 FROM tensorflow/tensorflow:2.8.0rc0-gpu-jupyter
-ADD motd /etc/motd
 WORKDIR /app
 ADD docker-requirements.txt .
 RUN apt -q update && apt -qy install nodejs && \
