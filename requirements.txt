@@ -2,16 +2,18 @@ numpy>=1.19.*
 pandas>=1.1.*
 scikit-learn>=1.*
 scipy>=1.7.*  # Will be automatically installed as a dep of scikit-learn
-statsmodels>=0.12.*
+statsmodels #>=0.13.1
 patsy>=0.5.*
 
 #python-snappy  # Compression for fastparquet (gzip is always available)
 #fastparquet  # "conda install -c conda-forge fastparquet"
 
 lightgbm>=3.3.*  # For Linux, glibc >= 2.14 is required. "conda install -c conda-forge lightgbm"
-pytorch # conda install pytorch torchvision cpuonly -c pytorch
+tqdm
+torch # conda install pytorch torchvision cpuonly -c pytorch
 #fastai # pip install fastai
-tensorflow>=2.6.*  # pip install --upgrade tensorflow
+#tensorflow>=2.6.*  # pip install --upgrade tensorflow
+tensorflow-metal
 keras  # pip install --upgrade keras
 
 apscheduler>=3.8.*  # "conda install -c conda-forge apscheduler"
