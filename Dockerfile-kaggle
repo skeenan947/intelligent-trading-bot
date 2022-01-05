@@ -1,3 +1,0 @@
-FROM gcr.io/kaggle-gpu-images/python
-ADD docker-requirements.txt .
-RUN pip install -r docker-requirements.txt 
