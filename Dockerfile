@@ -8,5 +8,6 @@ USER root
 RUN chown -R jupyter: /home/jupyter/ && pip install -r docker-requirements.txt
 USER jupyter
 EXPOSE 8888
+ENV SHELL=/bin/bash
 
 CMD jupyter-lab --ip=0.0.0.0 --no-browser
