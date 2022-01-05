@@ -8,3 +8,4 @@ patsy>=0.5.*
 sklearn
 lightgbm>=3.3.*
 jupyterlab
+tqdm
