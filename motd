@@ -1,3 +1,0 @@
-Welcome to the Bot!
-To get Jupyter up, run:
-$ jupyter-lab --ip=0.0.0.0 --no-browser
