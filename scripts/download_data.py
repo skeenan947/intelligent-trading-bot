@@ -1,7 +1,7 @@
 # IMPORTS
 import pandas as pd
 import math
-import os.path
+import os
 import json
 import time
 from datetime import timedelta, datetime
@@ -58,8 +58,7 @@ def main(config_file, futures):
     save = True
     data_path = Path(App.config["data_folder"])
     if not data_path.is_dir():
-        print(f"Data folder does not exist: {data_path}")
-        return
+        os.mkdir(data_path)
 
     start_dt = datetime.now()
     print(f"Start downloading klines...")
