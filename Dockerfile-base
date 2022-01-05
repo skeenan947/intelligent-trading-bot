@@ -1,12 +1,13 @@
 FROM tensorflow/tensorflow:2.8.0rc0-gpu-jupyter
 ADD motd /etc/motd
-RUN useradd -ms /bin/bash -G sudo -u 1001 jupyter
-WORKDIR /home/jupyter
+WORKDIR /app
 ADD docker-requirements.txt .
-WORKDIR /home/jupyter/app
-USER root
-RUN chown -R jupyter: /home/jupyter/ && pip install jupyterlab
-USER jupyter
+RUN apt -q update && apt -qy install nodejs && \
+    pip install -r docker-requirements.txt && \
+    apt-get clean && \
+    apt-get autoremove && \
+    rm -rf /var/lib/apt/lists/* /tmp/* ~/*
+
 EXPOSE 8888
 
-CMD jupyter-lab --ip=0.0.0.0 --no-browser
+CMD jupyter-lab --allow-root --ip=0.0.0.0 --no-browser
