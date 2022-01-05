@@ -85,7 +85,7 @@ def main(config_file, futures):
 
     available_data = math.ceil(delta_min / binsizes[freq])
 
-    if oldest_point == datetime.strptime('1 Jan 2017', '%d %b %Y'):
+    if oldest_point == datetime.strptime(App.config['start_date'], '%d %b %Y'):
         print('Downloading all available %s data for %s. Be patient..!' % (freq, symbol))
     else:
         print('Downloading %d minutes of new data available for %s, i.e. %d instances of %s data.' % (delta_min, symbol, available_data, freq))

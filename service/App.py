@@ -95,8 +95,9 @@ class App:
         "telegram_chat_id": "",
 
         "symbol": "",  # BTCUSDT ETHUSDT - use config
-        "base_asset": "BTC",  # BTC ETH
+        "base_asset": "",  # BTC ETH
         "quote_asset": "USDT",
+        "start_date": "1 Jan 2019"
 
         # File locations
         "data_folder": "",
