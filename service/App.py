@@ -98,6 +98,7 @@ class App:
         "base_asset": "",  # BTC ETH
         "quote_asset": "USDT",
         "start_date": "1 Jan 2019",
+        "prediction_start_date": "2020-02-01"
 
         # File locations
         "data_folder": "",
