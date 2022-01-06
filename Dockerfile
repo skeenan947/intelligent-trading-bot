@@ -6,6 +6,7 @@ WORKDIR /home/jupyter/app
 USER root
 RUN chown -R jupyter: /home/jupyter/ && pip install -r docker-requirements.txt
 USER jupyter
+RUN jupyter labextension install jupyterlab-nvdashboard
 EXPOSE 8888
 ENV SHELL=/bin/bash
 

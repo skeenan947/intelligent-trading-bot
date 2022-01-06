@@ -9,3 +9,4 @@ sklearn
 lightgbm>=3.3.*
 jupyterlab
 tqdm
+jupyterlab-nvdashboard
