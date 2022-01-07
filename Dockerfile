@@ -21,7 +21,6 @@ RUN apt -q update && apt -qy install nodejs && \
     apt-get clean && \
     apt-get autoremove && \
     rm -rf /var/lib/apt/lists/* /tmp/* ~/* && \
-    jupyter labextension install jupyterlab-nvdashboard && \
     curl https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz > /tmp/google-cloud-sdk.tar.gz && \
     mkdir -p /opt/gcloud && \
     tar -C /opt/gcloud -xvf /tmp/google-cloud-sdk.tar.gz && \
