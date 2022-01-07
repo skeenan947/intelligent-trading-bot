@@ -28,7 +28,7 @@ RUN apt -q update && apt -qy install nodejs && \
     rm /tmp/google-cloud-sdk.tar.gz
 
 # Adding the package path to local
-ENV PATH $PATH:/usr/local/gcloud/google-cloud-sdk/bin
+ENV PATH $PATH:/opt/gcloud/google-cloud-sdk/bin
 
 EXPOSE 8888
 
