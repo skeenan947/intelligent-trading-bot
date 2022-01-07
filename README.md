@@ -59,7 +59,7 @@ Starting the service: `python3 -m service.server -c config.json`
 # Training machine learning models
 
 The following batch scripts are used to train the models needed by the signaler:
-* Download the latest historic data: `python -m scripts.download_data -c config.json`
+* Download the latest historic data: `python -m scripts.async_download_data -c config.json`
 * Merge several historic datasets into one dataset: `python -m scripts.merge_data -c config.json`
 * Generate feature matrix: `python -m scripts.generate_features -c config.json`
 * Train prediction models: `python -m scripts.train_predict_models -c config.json`
