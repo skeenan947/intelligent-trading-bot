@@ -1,6 +1,7 @@
 FROM ghcr.io/skeenan947/intelligent-trading-bot:master
 ADD . /app
 WORKDIR /app
+RUN useradd -ms /bin/bash -G sudo -u 1001 jupyter
 USER root
 RUN chown -R jupyter: /app
 USER jupyter
