@@ -59,7 +59,7 @@ Starting the service: `python3 -m service.server -c config.json`
 # Training machine learning models
 
 The following batch scripts are used to train the models needed by the signaler:
-* Download the latest historic data: `python -m scripts.download_data -c config.json`
+* Download the latest historic data: `python -m scripts.async_download_data -c config.json`
 * Merge several historic datasets into one dataset: `python -m scripts.merge_data -c config.json`
 * Generate feature matrix: `python -m scripts.generate_features -c config.json`
 * Train prediction models: `python -m scripts.train_predict_models -c config.json`
@@ -72,9 +72,12 @@ There exist also batch scripts for hyper-parameter tuning and signal model gener
 
 The configuration parameters are specified in two files:
 * `service.App.py` in the `config` field of the `App` class
-* `-c config.jsom` argument to the services and scripts. The values from this config file will overwrite those in the `App.config` 
+* `-c config.json` argument to the services and scripts. The values from this config file will overwrite those in the `App.config`
 
 Here are some most important fields:
+* `api_key` your Binance API key
+* `api_secret` your Binance API secret key
+* `api_tld` (defaults to .com) top-level domain to use for the API, e.g. `us` for binance.us
 * `symbol` it is a trading pair like `BTCUSDT` - it is important for almost all cases
 * `data_folder` - location of data files which are needed only for batch scripts and not for services
 * `model_folder` - location of trained ML models which are stored by batch scripts and then are loaded by the services

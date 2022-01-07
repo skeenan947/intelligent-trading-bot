@@ -129,7 +129,7 @@ def start_collector_depth():
     #
     App.analyzer = Analyzer(None)
 
-    App.client = Client(api_key=App.config["api_key"], api_secret=App.config["api_secret"])
+    App.client = Client(api_key=App.config["api_key"], api_secret=App.config["api_secret"],tld=App.config["api_tld"])
 
     #
     # Register schedulers
@@ -181,7 +181,7 @@ def start_collector_depth():
 
 if __name__ == "__main__":
     App.analyzer = Analyzer(None)
-    App.client = Client(api_key=App.config["api_key"], api_secret=App.config["api_secret"])
+    App.client = Client(api_key=App.config["api_key"], api_secret=App.config["api_secret"],tld=App.config["api_tld"])
     App.loop = asyncio.get_event_loop()
     try:
         App.loop.run_until_complete(main_collector_depth_task())

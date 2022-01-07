@@ -1,0 +1,10 @@
+{
+  "api_key": "BINANCE_API_KEY",
+  "api_secret": "BINANCE_API_SECRET",
+  "tld": "us", # com, us, etc
+  "symbol": "ETHUSDT", # BTCUSDT, ETHUSDT etc
+  "base_asset": "BTC",
+  "quote_asset": "USDT",
+  "data_folder": "data/",
+  "model_folder": "model/"
+}

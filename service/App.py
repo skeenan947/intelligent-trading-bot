@@ -88,14 +88,17 @@ class App:
         # Binance
         "api_key": "",
         "api_secret": "",
+        "api_tld": "com",
 
         # Telegram
         "telegram_bot_token": "",
         "telegram_chat_id": "",
 
         "symbol": "",  # BTCUSDT ETHUSDT - use config
-        "base_asset": "BTC",  # BTC ETH
+        "base_asset": "",  # BTC ETH
         "quote_asset": "USDT",
+        "start_date": "1 Jan 2019",
+        "prediction_start_date": "2020-02-01",
 
         # File locations
         "data_folder": "",

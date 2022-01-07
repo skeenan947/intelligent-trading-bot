@@ -11,10 +11,13 @@ import click
 
 #import aiohttp
 import asyncio
+from functools import wraps
 
 from binance.client import Client
 from binance.streams import BinanceSocketManager
 from binance.enums import *
+
+from binance import AsyncClient, DepthCacheManager, BinanceSocketManager
 
 # DO NOT INCLUDE because it has function klines_to_df with the same name but different implementation (name conflict)
 #from common.utils import *
@@ -34,17 +37,24 @@ batch_size = 750
 
 symbols = ["XBTUSD", "ETHUSD", "XRPZ18", "LTCZ18", "EOSZ18", "BCHZ18", "ADAZ18", "TRXZ18"]
 
-App.client = Client(api_key=App.config["api_key"], api_secret=App.config["api_secret"],tld=App.config["api_tld"])
+#App.client = Client(api_key=App.config["api_key"], api_secret=App.config["api_secret"],tld=App.config["api_tld"])
 
+def coro(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        return asyncio.run(f(*args, **kwargs))
+
+    return wrapper
 
 #
 # Historic data
 #
 
 @click.command()
+@coro
 @click.option('--config_file', '-c', type=click.Path(), default='', help='Configuration file name')
 @click.option('--futures', '-f', default=False, help='Download futures data')
-def main(config_file, futures):
+async def main(config_file, futures):
     """
     Retrieving historic klines from binance server.
 
@@ -60,17 +70,34 @@ def main(config_file, futures):
     if not data_path.is_dir():
         os.mkdir(data_path)
 
-    start_dt = datetime.now()
-    print(f"Start downloading klines...")
+    client = await AsyncClient.create()
 
-    print(f"Downloader parameters. Symbol {symbol}. Frequency: {freq}. Save: {save}. Futures: {futures}.")
-
+    # initialise websocket factory manager
+    bsm = BinanceSocketManager(client)
+    
+    # create listener using async with
+    # this will exit and close the connection after 5 messages
+    async with bsm.trade_socket(symbol) as ts:
+        for _ in range(5):
+            res = await ts.recv()
+            print(f'recv {res}')
+    
+    # use generator to fetch 1 minute klines for the last day up until now
+    klines = []
+    klines_type=HistoricalKlinesType.SPOT
+    if futures:
+        klines_type=HistoricalKlinesType.FUTURES
+    async for kline in await client.get_historical_klines_generator(symbol, AsyncClient.KLINE_INTERVAL_1MINUTE, App.config["start_date"],klines_type=klines_type):
+        klines.append(kline)
+    
+    await client.close_connection()
+    
     if futures:
         filename = f"{symbol}-{freq}-futurs.csv"
     else:
         filename = f"{symbol}-{freq}-klines.csv"
     file_path = (data_path / filename).resolve()
-
+    
     if file_path.is_file():
         data_df = pd.read_csv(file_path)
         data_df['timestamp'] = pd.to_datetime(data_df['timestamp'])
@@ -78,41 +105,12 @@ def main(config_file, futures):
     else:
         data_df = pd.DataFrame()
         print(f"File not found. All data will be downloaded and stored in newly created file.")
-
-    oldest_point, newest_point = minutes_of_new_data(symbol, freq, data_df)
-
-    delta_min = (newest_point - oldest_point).total_seconds() / 60
-
-    available_data = math.ceil(delta_min / binsizes[freq])
-
-    if oldest_point == datetime.strptime(App.config['start_date'], '%d %b %Y'):
-        print('Downloading all available %s data for %s. Be patient..!' % (freq, symbol))
-    else:
-        print('Downloading %d minutes of new data available for %s, i.e. %d instances of %s data.' % (delta_min, symbol, available_data, freq))
-
-    klines_type=HistoricalKlinesType.SPOT
-    if futures:
-        klines_type=HistoricalKlinesType.FUTURES
-    klines = App.client.get_historical_klines(
-        symbol,
-        freq,
-        oldest_point.strftime("%d %b %Y %H:%M:%S"),
-        newest_point.strftime("%d %b %Y %H:%M:%S"),
-        klines_type=klines_type
-    )
-
+    
     data_df = klines_to_df(klines, data_df)
-
+    
     if save:
         data_df.to_csv(file_path)
-
-    print('All caught up..!')
-
-    elapsed = datetime.now() - start_dt
-    print(f"Finished downloading data in {int(elapsed.total_seconds())} seconds.")
-
-    return data_df
-
+    
 
 #
 # Static data
@@ -376,6 +374,6 @@ def user_message_fn(msg):
     print(f"Message type: {msg['e']}")
     print(msg)
 
-
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())
