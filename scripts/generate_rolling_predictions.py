@@ -1,5 +1,6 @@
 import sys
 import os
+import glob
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
 from typing import Union
@@ -105,9 +106,12 @@ def main(config_file):
     freq = "1m"
     symbol = App.config["symbol"]
     data_path = Path(App.config["data_folder"])
+    work_path = Path(App.config["work_folder"])
     if not data_path.is_dir():
         print(f"Data folder does not exist: {data_path}")
         return
+    if not work_path.is_dir():
+        os.mkdir(work_path)
 
     #
     # Load feature matrix
@@ -177,6 +181,10 @@ def main(config_file):
     for step in range(steps):
 
         print(f"\n===>>> Start step {step}/{steps}")
+        step_pickle_file = work_path / f"/step{step}of{steps}.pickle"
+        if os.path.exists(step_pickle_file):
+            print(f"Found existing Pickle for step, skipping...")
+            continue
 
         # Predict data
 
@@ -339,11 +347,19 @@ def main(config_file):
         # Append predicted *rows* to the end of previous predicted rows
         #
         # Predictions for all labels and histories (and algorithms) have been generated for the iteration
-        labels_hat_df = labels_hat_df.append(predict_labels_df)
+        #labels_hat_df = labels_hat_df.append(predict_labels_df)
+        # Save your work:
+        #  * labels_hat_df at current state (can get current step# from count)
+        # or, save each `predict_labels_df` to a separate pickle file, load and join at the end
+        # need to skip steps (and appropriate data) if previous step files exist
+        # save as <labelname>.pickle
+        predict_labels_df.to_pickle(step_pickle_file)
 
         print(f"End step {step}/{steps}.")
         print(f"Predicted {len(predict_labels_df.columns)} labels.")
 
+    for step_file in list(glob.glob(work_path / f"/step*of{steps}.pickle")):
+        labels_hat_df = labels_hat_df.append(pd.read_pickle(step_file))
 
     # End of loop over prediction steps
     print("")

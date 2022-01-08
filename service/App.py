@@ -103,6 +103,7 @@ class App:
         # File locations
         "data_folder": "",
         "model_folder": "",
+        "work_folder": "work",
 
         # === analyzer (NAMES, also for scripts) ===
 
