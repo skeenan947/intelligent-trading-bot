@@ -76,7 +76,7 @@ def train_gb(df_X, df_y, params: dict):
     lambda_l2 = params.get("lambda_l2")
 
     lgbm_params = {
-        'device_type': 'cuda',
+        'device_type': App.config['lgbm_device_type'],
         'learning_rate': learning_rate,
         'max_depth': max_depth,  # Can be -1
         #"n_estimators": 10000,

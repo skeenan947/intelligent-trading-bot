@@ -6,5 +6,7 @@
   "base_asset": "BTC",
   "quote_asset": "USDT",
   "data_folder": "data/",
-  "model_folder": "model/"
+  "model_folder": "model/",
+  "work_folder": "work",
+  "lgbm_device_type": "cuda"
 }

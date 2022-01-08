@@ -105,6 +105,9 @@ class App:
         "model_folder": "",
         "work_folder": "work",
 
+        # device config
+        "lgbm_device_type": "cuda",
+
         # === analyzer (NAMES, also for scripts) ===
 
         # Target columns with true values which will be predicted
