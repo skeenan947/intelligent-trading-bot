@@ -350,10 +350,9 @@ def main(config_file):
         # Predictions for all labels and histories (and algorithms) have been generated for the iteration
         #labels_hat_df = labels_hat_df.append(predict_labels_df)
         # Save your work:
-        #  * labels_hat_df at current state (can get current step# from count)
-        # or, save each `predict_labels_df` to a separate pickle file, load and join at the end
-        # need to skip steps (and appropriate data) if previous step files exist
-        # save as <labelname>.pickle
+        #  save each `predict_labels_df` to a separate pickle file, load and join at the end
+        #  need to skip steps (and appropriate data) if previous step files exist
+        #  save as <labelname>.pickle
         predict_labels_df.to_pickle(step_pickle_file)
 
         print(f"End step {step}/{steps}.")
