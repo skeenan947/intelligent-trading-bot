@@ -36,7 +36,7 @@ Parameters:
 # Parameters
 #
 class P:
-    feature_sets = ["kline"]  # futur
+    feature_sets = ["kline","futur"]  # "futur" for futures
 
     labels = App.config["labels"]
     features_kline = App.config["features_kline"]
