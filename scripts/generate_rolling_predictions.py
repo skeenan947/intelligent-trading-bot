@@ -32,7 +32,7 @@ The output predicted labels will cover shorter period of time because we need so
 class P:
     # Each one is a separate procedure with its algorithm and (expected) input features
     # Leave only what we want to generate (say, only klines for debug purposes)
-    feature_sets = ["kline", ]  # "futur"
+    feature_sets = App.config["feature_sets"]
 
     # These source columns will be added to the output file
     in_features_kline = [

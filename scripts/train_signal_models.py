@@ -83,7 +83,7 @@ grid_signals = [
 # Parameters
 #
 class P:
-    feature_sets = ["kline", "futur"]  # "futur" for futures
+    feature_sets = App.config["feature_sets"]
 
     in_nrows = 100_000_000
 

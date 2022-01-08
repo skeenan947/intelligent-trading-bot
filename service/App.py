@@ -94,6 +94,7 @@ class App:
         "telegram_bot_token": "",
         "telegram_chat_id": "",
 
+        "feature_sets": ["kline", "futur"],
         "symbol": "",  # BTCUSDT ETHUSDT - use config
         "base_asset": "",  # BTC ETH
         "quote_asset": "USDT",
