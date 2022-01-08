@@ -31,6 +31,24 @@ from keras.callbacks import *
 
 from service.App import App
 
+# Strategy selection - TPU, GPU, or CPU
+def select_strategy():
+    # Choose device type
+    try:
+      tpu = tf.distribute.cluster_resolver.TPUClusterResolver.connect()
+    except ValueError:
+      tpu = None
+      gpus = tf.config.experimental.list_logical_devices("GPU")
+
+    if tpu:
+      strategy = tf.distribute.experimental.TPUStrategy(tpu, steps_per_run=128) # Going back and forth between TPU and host is expensive. Better to run 128 batches on the TPU before reporting back.
+    elif len(gpus) > 1:
+      strategy = tf.distribute.MirroredStrategy([gpu.name for gpu in gpus])
+    elif len(gpus) == 1:
+      strategy = tf.distribute.get_strategy() # default strategy that works on CPU and single GPU
+    else:
+      strategy = tf.distribute.get_strategy() # default strategy that works on CPU and single GPU
+    return strategy
 
 #
 # GB
@@ -189,40 +207,42 @@ def train_nn(df_X, df_y, params: dict):
     n_epochs = params.get("n_epochs")
     batch_size = params.get("bs")
 
-    # Topology
-    model = Sequential()
-    # sigmoid, relu, tanh, selu, elu, exponential
-    # kernel_regularizer=l2(0.001)
+    strategy = select_strategy()
+    with strategy.scope(): # must define within strategy for TPU scope
+        # Topology
+        model = Sequential()
+        # sigmoid, relu, tanh, selu, elu, exponential
+        # kernel_regularizer=l2(0.001)
 
-    reg_l2 = 0.001
+        reg_l2 = 0.001
 
-    model.add(
-        Dense(n_features, activation='sigmoid', input_dim=n_features)  # , kernel_regularizer=l2(reg_l2)
-    )
+        model.add(
+            Dense(n_features, activation='sigmoid', input_dim=n_features)  # , kernel_regularizer=l2(reg_l2)
+        )
 
-    model.add(Dense(n_features // 2, activation='sigmoid'))  # One hidden layer
+        model.add(Dense(n_features // 2, activation='sigmoid'))  # One hidden layer
 
-    #model.add(Dense(layers[0], activation='sigmoid', input_dim=n_features, kernel_regularizer=l2(reg_l2)))
-    #if len(layers) > 1:
-    #    model.add(Dense(layers[1], activation='sigmoid', kernel_regularizer=l2(reg_l2)))
-    #if len(layers) > 2:
-    #    model.add(Dense(layers[2], activation='sigmoid', kernel_regularizer=l2(reg_l2)))
+        #model.add(Dense(layers[0], activation='sigmoid', input_dim=n_features, kernel_regularizer=l2(reg_l2)))
+        #if len(layers) > 1:
+        #    model.add(Dense(layers[1], activation='sigmoid', kernel_regularizer=l2(reg_l2)))
+        #if len(layers) > 2:
+        #    model.add(Dense(layers[2], activation='sigmoid', kernel_regularizer=l2(reg_l2)))
 
-    model.add(
-        Dense(1, activation='sigmoid')
-    )
+        model.add(
+            Dense(1, activation='sigmoid')
+        )
 
-    # Compile model
-    optimizer = Adam(learning_rate=learning_rate)
-    model.compile(
-        loss='binary_crossentropy',
-        optimizer=optimizer,
-        metrics=[
-            tf.keras.metrics.AUC(name="auc"),
-            tf.keras.metrics.Precision(name="precision"),
-            tf.keras.metrics.Recall(name="recall"),
-        ],
-    )
+        # Compile model
+        optimizer = tf.train.AdamOptimizer(learning_rate) # TF optimizer supports TPU better than Keras version
+        model.compile(
+            loss='binary_crossentropy',
+            optimizer=optimizer,
+            metrics=[
+                tf.keras.metrics.AUC(name="auc"),
+                tf.keras.metrics.Precision(name="precision"),
+                tf.keras.metrics.Recall(name="recall"),
+            ],
+        )
 
     es = EarlyStopping(
         monitor="loss",  # val_loss loss
@@ -235,6 +255,7 @@ def train_nn(df_X, df_y, params: dict):
     #
     # Train
     #
+
     model.fit(
         X_train,
         y_train,
@@ -313,10 +334,12 @@ def train_lc(df_X, df_y, params: dict):
     #
     # Create model
     #
-    args = params.copy()
-    del args["is_scale"]
-    args["n_jobs"] = 1
-    model = LogisticRegression(**args)
+    strategy = select_strategy()
+    with strategy.scope(): # must define within strategy for TPU scope
+        args = params.copy()
+        del args["is_scale"]
+        args["n_jobs"] = 1
+        model = LogisticRegression(**args)
 
     #
     # Train
@@ -387,13 +410,15 @@ def train_svc(df_X, df_y, params: dict):
 
     y_train = df_y.values
 
-    #
-    # Create model
-    #
-    args = params.copy()
-    del args["is_scale"]
-    args['probability'] = True  # Required to use predict_proba()
-    model = SVC(**args)
+    strategy = select_strategy()
+    with strategy.scope(): # must define within strategy for TPU scope
+        #
+        # Create model
+        #
+        args = params.copy()
+        del args["is_scale"]
+        args['probability'] = True  # Required to use predict_proba()
+        model = SVC(**args)
 
     #
     # Train
