@@ -239,7 +239,7 @@ def train_nn(df_X, df_y, params: dict):
         epochs=n_epochs,
         #validation_data=(X_validate, y_validate),
         #class_weight={0: 1, 1: 20},
-        callbacks=[lgbm.early_stopping(10, verbose=0), lgbm.log_evaluation(period=0),es],
+        callbacks=[lgbm.log_evaluation(period=0),es],
         verbose=0,
     )
 
