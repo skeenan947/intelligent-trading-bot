@@ -29,6 +29,8 @@ from keras.models import Sequential, save_model, load_model
 from keras.layers import Dense, Dropout
 from keras.callbacks import *
 
+from service.App import App
+
 
 #
 # GB
