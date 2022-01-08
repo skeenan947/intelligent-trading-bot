@@ -41,7 +41,7 @@ def select_strategy():
       gpus = tf.config.experimental.list_logical_devices("GPU")
 
     if tpu:
-      strategy = tf.distribute.experimental.TPUStrategy(tpu, steps_per_run=128) # Going back and forth between TPU and host is expensive. Better to run 128 batches on the TPU before reporting back.
+      strategy = tf.distribute.experimental.TPUStrategy(tpu) # Going back and forth between TPU and host is expensive. Better to run 128 batches on the TPU before reporting back.
     elif len(gpus) > 1:
       strategy = tf.distribute.MirroredStrategy([gpu.name for gpu in gpus])
     elif len(gpus) == 1:
