@@ -76,7 +76,6 @@ def train_gb(df_X, df_y, params: dict):
     lambda_l2 = params.get("lambda_l2")
 
     lgbm_params = {
-        'num_gpu': 4,
         'device_type': 'cuda',
         'learning_rate': learning_rate,
         'max_depth': max_depth,  # Can be -1
@@ -104,7 +103,7 @@ def train_gb(df_X, df_y, params: dict):
 
         'metric': {'cross_entropy'},  # auc auc_mu map (mean_average_precision) cross_entropy binary_logloss cross_entropy_lambda binary_error
 
-        'verbose': 0,
+        'verbose': -1,
     }
 
     model = lgbm.train(
@@ -113,7 +112,6 @@ def train_gb(df_X, df_y, params: dict):
         num_boost_round=num_boost_round,
         #valid_sets=[lgbm.Dataset(X_validate, y_validate)],
         #early_stopping_rounds=int(num_boost_round / 5),
-        verbose_eval=100,
     )
 
     return (model, scaler)
@@ -241,7 +239,7 @@ def train_nn(df_X, df_y, params: dict):
         epochs=n_epochs,
         #validation_data=(X_validate, y_validate),
         #class_weight={0: 1, 1: 20},
-        callbacks=[es],
+        callbacks=[lgb.early_stopping(10, verbose=0), lgb.log_evaluation(period=0),es],
         verbose=0,
     )
 
