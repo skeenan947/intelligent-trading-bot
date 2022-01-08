@@ -103,7 +103,7 @@ def train_gb(df_X, df_y, params: dict):
 
         'metric': {'cross_entropy'},  # auc auc_mu map (mean_average_precision) cross_entropy binary_logloss cross_entropy_lambda binary_error
 
-        'verbose': -1,
+        'verbose': 0,
     }
 
     model = lgbm.train(
