@@ -24,10 +24,10 @@ import lightgbm as lgbm
 import tensorflow as tf
 
 from tensorflow.keras.optimizers import *
-from keras.regularizers import *
-from keras.models import Sequential, save_model, load_model
-from keras.layers import Dense, Dropout
-from keras.callbacks import *
+from tensorflow.keras.regularizers import *
+from tensorflow.keras.models import Sequential, save_model, load_model
+from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras.callbacks import *
 
 from service.App import App
 
