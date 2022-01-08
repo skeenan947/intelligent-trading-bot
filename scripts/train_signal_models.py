@@ -83,7 +83,7 @@ grid_signals = [
 # Parameters
 #
 class P:
-    feature_sets = ["kline", ]  # "futur"
+    feature_sets = ["kline", "futur"]  # "futur" for futures
 
     in_nrows = 100_000_000
 
