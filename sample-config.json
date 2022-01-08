@@ -5,6 +5,9 @@
   "symbol": "ETHUSDT", # BTCUSDT, ETHUSDT etc
   "base_asset": "BTC",
   "quote_asset": "USDT",
+  "prediction_start_date": "2020-02-01",
+  "prediction_frequency": "20160",
+  "prediction_length": "50",
   "data_folder": "data/",
   "model_folder": "model/",
   "work_folder": "work",
