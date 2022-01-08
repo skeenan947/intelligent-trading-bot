@@ -344,7 +344,7 @@ def train_lc(df_X, df_y, params: dict):
     #
     # Train
     #
-    model.fit(X_train, y_train)
+    model.fit(X_train, y_train, batch_size=params.get("bs", 1024))
 
     return (model, scaler)
 
@@ -423,7 +423,7 @@ def train_svc(df_X, df_y, params: dict):
     #
     # Train
     #
-    model.fit(X_train, y_train)
+    model.fit(X_train, y_trainbatch_size=params.get("bs", 1024))
 
     return (model, scaler)
 
