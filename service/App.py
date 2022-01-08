@@ -100,7 +100,7 @@ class App:
         "start_date": "1 Jan 2019",
         "prediction_start_date": "2020-02-01", # when should prediction data start
         "prediction_frequency": "20160", # re-train on 2-week periods
-        "prediction_length": "50", # how many periods to analyze, e.g. how much data do you have
+        "prediction_count": "50", # how many periods to analyze, e.g. how much data do you have
 
         # File locations
         "data_folder": "",
