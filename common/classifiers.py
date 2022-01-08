@@ -110,6 +110,7 @@ def train_gb(df_X, df_y, params: dict):
         lgbm_params,
         train_set=lgbm.Dataset(X_train, y_train),
         num_boost_round=num_boost_round,
+        callbacks=[lgbm.log_evaluation(period=0)],
         #valid_sets=[lgbm.Dataset(X_validate, y_validate)],
         #early_stopping_rounds=int(num_boost_round / 5),
     )
@@ -239,7 +240,7 @@ def train_nn(df_X, df_y, params: dict):
         epochs=n_epochs,
         #validation_data=(X_validate, y_validate),
         #class_weight={0: 1, 1: 20},
-        callbacks=[lgbm.log_evaluation(period=0),es],
+        callbacks=[es],
         verbose=0,
     )
 
