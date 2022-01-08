@@ -18,7 +18,7 @@ from common.signal_generation import *
 # Parameters
 #
 class P:
-    feature_sets = ["kline", ]  # "futur"
+    feature_sets = App.config["feature_sets"]
 
     labels = App.config["labels"]
     features_kline = App.config["features_kline"]

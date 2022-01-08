@@ -56,7 +56,7 @@ class Analyzer:
         model_path = model_path.resolve()
 
         labels = App.config["labels"]
-        feature_sets = ["kline"]
+        feature_sets = App.config["feature_sets"]
         algorithms = ["gb", "nn", "lc"]
         self.models = load_models(model_path, labels, feature_sets, algorithms)
 
