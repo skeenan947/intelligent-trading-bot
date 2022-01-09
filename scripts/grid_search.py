@@ -17,7 +17,8 @@ from common.classifiers import *
 Find good hyper-parameters of algorithms applied to generated featues.
 """
 
-data_path = r"C:\DATA2\BITCOIN\GENERATED"
+load_config('config.json')
+data_path = App.config['data_folder']
 data_file = r"BTCUSDT-1m-features.csv"
 
 labels = App.config["labels"]
