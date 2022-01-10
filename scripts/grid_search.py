@@ -167,7 +167,7 @@ def main():
     #
 
     # Load all data
-    df_all = pd.read_csv(data_path + "\\" + data_file, parse_dates=['timestamp'], nrows=nrows)
+    df_all = pd.read_csv(data_path + "/" + data_file, parse_dates=['timestamp'], nrows=nrows)
 
     print(f"Feature matrix loaded. Length: {len(df_all)}. Width: {len(df_all.columns)}")
 
@@ -175,6 +175,7 @@ def main():
         df_all[label] = df_all[label].astype(int)  # "category" NN does not work without this
 
     # Select necessary features and label
+    print(["timestamp"] + features_kline + features_futur + labels)
     df_all = df_all[["timestamp"] + features_kline + features_futur + labels]
 
     # Spot and futures have different available histories. If we drop nans in all of them, then we get a very short data frame (corresponding to futureus which have little data)
