@@ -182,7 +182,7 @@ def main(config_file):
     for step in range(steps):
 
         print(f"\n===>>> Start step {step}/{steps}")
-        step_pickle_file = work_path / f"/step{step}of{steps}.pickle"
+        step_pickle_file = work_path / f"step{step}of{steps}.pickle"
         if os.path.exists(step_pickle_file):
             print(f"Found existing Pickle for step, skipping...")
             continue
@@ -358,7 +358,7 @@ def main(config_file):
         print(f"End step {step}/{steps}.")
         print(f"Predicted {len(predict_labels_df.columns)} labels.")
 
-    for step_file in list(glob.glob(work_path / f"/step*of{steps}.pickle")):
+    for step_file in list(glob.glob(work_path / f"step*of{steps}.pickle")):
         labels_hat_df = labels_hat_df.append(pd.read_pickle(step_file))
 
     # End of loop over prediction steps
