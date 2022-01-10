@@ -157,7 +157,7 @@ class App:
             "f_span_1", "f_span_2", "f_span_5", "f_span_20", "f_span_60", "f_span_180",
             "f_trades_1", "f_trades_2", "f_trades_5", "f_trades_20", "f_trades_60", "f_trades_180",
             'f_close_area_20', 'f_close_area_60', 'f_close_area_120', 'f_close_area_180',
-            'close_trend_2', 'close_trend_5', 'close_trend_20', 'close_trend_60', 'close_trend_180',
+            'f_close_trend_2', 'f_close_trend_5', 'f_close_trend_20', 'f_close_trend_60', 'f_close_trend_180',
         ],  # 38 features
 
         "features_depth": [
