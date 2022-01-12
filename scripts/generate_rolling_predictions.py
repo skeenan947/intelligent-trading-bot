@@ -179,12 +179,15 @@ def main(config_file):
     # Result rows. Here store only rows for which we make predictions
     labels_hat_df = pd.DataFrame()
 
+    step_pickle_files = []
     for step in range(steps):
 
         print(f"\n===>>> Start step {step}/{steps}")
-        step_pickle_file = work_path / f"step{step}of{steps}.pickle"
+        step_fname = f"step{step}of{steps}.pickle"
+        step_pickle_file = work_path / step_fname
         if os.path.exists(step_pickle_file):
             print(f"Found existing Pickle for step, skipping...")
+            step_pickle_files += [step_pickle_file]
             continue
 
         # Predict data
@@ -354,11 +357,12 @@ def main(config_file):
         #  need to skip steps (and appropriate data) if previous step files exist
         #  save as <labelname>.pickle
         predict_labels_df.to_pickle(step_pickle_file)
+        step_pickle_files += [step_pickle_file]
 
         print(f"End step {step}/{steps}.")
         print(f"Predicted {len(predict_labels_df.columns)} labels.")
 
-    for step_file in list(glob.glob(work_path / f"step*of{steps}.pickle")):
+    for step_file in step_pickle_files:
         labels_hat_df = labels_hat_df.append(pd.read_pickle(step_file))
 
     # End of loop over prediction steps
