@@ -1,4 +1,4 @@
-numpy>=1.19.*
+numpy
 pandas>=1.1.*
 scikit-learn>=1.*
 scipy>=1.7.*  # Will be automatically installed as a dep of scikit-learn
@@ -13,7 +13,7 @@ tqdm
 torch # conda install pytorch torchvision cpuonly -c pytorch
 #fastai # pip install fastai
 #tensorflow>=2.6.*  # pip install --upgrade tensorflow
-tensorflow-metal
+tensorflow
 keras  # pip install --upgrade keras
 
 apscheduler>=3.8.*  # "conda install -c conda-forge apscheduler"
@@ -24,3 +24,7 @@ python-binance>=1.0.*  # "pip install python-binance". It has to executed from A
 #
 #tenacity
 click
+apscheduler
+
+# Monitoring
+prometheus-client
