@@ -17,7 +17,7 @@ from common.label_generation import *
 # Parameters
 #
 class P:
-    feature_sets = ["kline", ]  # "futur"
+    feature_sets = ["futur", "kline" ]  # "kline", "futur"
 
     in_nrows = 10_000_000
 

@@ -9,7 +9,7 @@ import pandas as pd
 
 import matplotlib.pyplot as plt
 
-from service.App import App
+from service.App import *
 from common.utils import *
 from common.classifiers import *
 
