@@ -58,6 +58,43 @@ async def notify_telegram():
     except Exception as e:
         print(f"Error sending notification: {e}")
 
+async def notify_console():
+    status = App.status
+    signal = App.signal
+    notification_threshold = App.config["signaler"]["notification_threshold"]
+    symbol = App.config["symbol"]
+    base_asset =  App.config["base_asset"]
+    quote_asset =  App.config["quote_asset"]
+    close_price = signal.get('close_price')
+
+    signal_side = signal.get("side")
+    score = signal.get('score')
+
+    # How many steps of the score
+    score_step_length = 0.05
+    score_steps = np.abs(score) // score_step_length
+
+    if score_steps < notification_threshold:
+        return
+
+    if score > 0:
+        sign = "📈" * int(score_steps - notification_threshold + 1)  # 📈 >
+    elif score < 0:
+        sign = "📉" * int(score_steps - notification_threshold + 1)  # 📉 <
+    else:
+        sign = ""
+
+    # Crypto Currency Symbols: https://github.com/yonilevy/crypto-currency-symbols
+    if base_asset == "BTC":
+        symbol_sign = "₿"
+    elif base_asset == "ETH":
+        symbol_sign = "Ξ"
+    else:
+        symbol_sign = base_asset
+
+    message = f"{symbol_sign} {int(close_price):,} {sign} Score: {score:+.2f}"
+
+    print(message)
 
 if __name__ == '__main__':
     pass
