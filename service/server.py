@@ -16,6 +16,8 @@ from service.analyzer import *
 from service.notifier import *
 from service.trader import *
 
+from prometheus_client import start_http_server
+
 import logging
 
 log = logging.getLogger('server')
@@ -45,7 +47,7 @@ async def main_task():
     # Signal is stored in App.signal
 
     if "notify" in App.config["actions"]:
-        notify_task = App.loop.create_task(notify_telegram())
+        notify_task = App.loop.create_task(notify_prometheus())
 
     # Now we have a list of signals and can make trade decisions using trading logic and trade
     if "trade" in App.config["actions"]:
@@ -155,4 +157,5 @@ def start_server(config_file):
 
 
 if __name__ == "__main__":
+    start_http_server(8000)
     start_server()

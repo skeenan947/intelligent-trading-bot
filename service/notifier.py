@@ -1,10 +1,18 @@
 import os
 import sys
 import asyncio
+from numpy import nan
 import requests
 
 from service.App import *
 from common.utils import *
+
+from prometheus_client import Gauge
+
+# Define gauges
+asset_quote_gauge = Gauge('trading_bot_asset_quote', 'Asset quote', ['symbol','base_asset'])
+portfolio_balance_gauge = Gauge('trading_bot_portfolio_balance', 'Portfolio Balance', ['symbol'])
+trade_score_gauge = Gauge('trading_bot_trade_score', 'Signal to buy, hold, or sell', ['symbol','base_asset'])
 
 
 async def notify_telegram():
@@ -95,6 +103,39 @@ async def notify_console():
     message = f"{symbol_sign} {int(close_price):,} {sign} Score: {score:+.2f}"
 
     print(message)
+    file1 = open("trade-output.txt", "a")  # append mode
+    file1.write(f"{message}\n")
+    file1.close()
+
+async def notify_prometheus():
+    status = App.status
+    signal = App.signal
+    symbol = App.config["symbol"]
+    buy_threshold = App.config["signaler"]["model"]["buy_threshold"]
+    sell_threshold = App.config["signaler"]["model"]["sell_threshold"]
+    base_asset =  App.config["base_asset"]
+    quote_asset =  App.config["quote_asset"]
+    close_price = signal.get('close_price')
+
+    signal_side = signal.get("side")
+    score = signal.get('score')
+
+    if(score is None or score == 'nan' or score == 'NaN' or score is nan):
+        score = 0
+    if(sell_threshold < score < buy_threshold):
+        signal_type = 'HOLD'
+    if score > buy_threshold:
+        signal_type = "BUY"
+    elif score < sell_threshold:
+        signal_type = "SELL"
+
+    trade_score_gauge.labels(symbol, base_asset).set(score)
+
+    asset_quote_gauge.labels(symbol, base_asset).set(close_price)
+
+    portfolio_balance_gauge.labels(base_asset).set((float(App.base_quantity) * float(close_price)))
+    portfolio_balance_gauge.labels(quote_asset).set(App.quote_quantity)
+
 
 if __name__ == '__main__':
     pass
