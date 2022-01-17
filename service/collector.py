@@ -188,14 +188,14 @@ async def data_provider_health_check():
     symbol = App.config["symbol"]
 
     # Get server state (ping) and trade status (e.g., trade can be suspended on some symbol)
-    system_status = App.client.get_system_status()
+    #system_status = App.client.get_system_status()
     #{
     #    "status": 0,  # 0: normal，1：system maintenance
     #    "msg": "normal"  # normal or System maintenance.
     #}
-    if not system_status or system_status.get("status") != 0:
-        App.server_status = 1
-        return 1
+    #if not system_status or system_status.get("status") != 0:
+    #    App.server_status = 1
+    #    return 1
     App.server_status = 0
 
     # Ping the server
