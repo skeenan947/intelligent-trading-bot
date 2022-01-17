@@ -44,8 +44,8 @@ class App:
 
     # Available assets for trade
     # Can be set by the sync/recover function or updated by the trading algorithm
-    base_quantity = "0.04108219"  # BTC owned (on account, already bought, available for trade)
-    quote_quantity = "1000.0"  # USDT owned (on account, available for trade)
+    base_quantity = "0.00000073"  # BTC owned (on account, already bought, available for trade)
+    quote_quantity = "99.00416546"  # USDT owned (on account, available for trade)
 
     #
     # Trader. Status data retrieved from the server. Below are examples only.
@@ -190,7 +190,7 @@ class App:
             "test_order_before_submit": False,  # Send test submit to the server as part of validation
             "simulate_order_execution": False,  # Instead of real orders, simulate their execution (immediate buy/sell market orders and use high price of klines for limit orders)
 
-            "percentage_used_for_trade": 99,  # in % to the available USDT quantity, that is, we will derive how much BTC to buy using this percentage
+            "percentage_used_for_trade": 20,  # in % to the available USDT quantity, that is, we will derive how much BTC to buy using this percentage
             "limit_price_adjustment": -0.0001,  # Limit price of orders will be better than the latest close price (0 means no change, positive - better for us, negative - worse for us)
 
             # Signal model (trade strategy) - currently NOT USED
