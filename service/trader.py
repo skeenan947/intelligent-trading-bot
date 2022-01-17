@@ -43,13 +43,17 @@ async def main_trader_task():
     #
 
     status = App.status
+    log.info(f"App.status: {status}")
 
     if status == "BUYING" or status == "SELLING":
         # We expect that an order was created before and now we need to check if it still exists or was executed
         # -----
         order_status = await update_order_status()
+        log.info(f"order_status: {order_status}")
+
 
         order = App.order
+        log.info(f"order: {order}")
         # If order status executed then change the status
         # Status codes: NEW PARTIALLY_FILLED FILLED CANCELED PENDING_CANCEL(currently unused) REJECTED EXPIRED
 
@@ -84,6 +88,7 @@ async def main_trader_task():
         elif order_status == ORDER_STATUS_NEW:
             pass  # Wait further for execution
         else:
+            log.info(f"Order still active or status not found.  order_status: {order_status}")
             pass  # Order still exists and is active
     elif status == "BOUGHT" or status == "SOLD":
         pass  # Do nothing
@@ -132,6 +137,7 @@ async def main_trader_task():
 
     if status == "SOLD" and signal_side == "BUY":
         # -----
+        log.info(f"App.status: {status}, starting new limit order, side: {SIDE_BUY}")
         await new_limit_order(side=SIDE_BUY)
 
         if App.config["trader"]["no_trades_only_data_processing"]:
@@ -141,6 +147,7 @@ async def main_trader_task():
             App.status = "BUYING"
     elif status == "BOUGHT" and signal_side == "SELL":
         # -----
+        log.info(f"App.status: {status}, starting new limit order, side: {SIDE_SELL}")
         await new_limit_order(side=SIDE_SELL)
 
         if App.config["trader"]["no_trades_only_data_processing"]:
