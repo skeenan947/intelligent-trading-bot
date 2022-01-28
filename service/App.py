@@ -44,8 +44,8 @@ class App:
 
     # Available assets for trade
     # Can be set by the sync/recover function or updated by the trading algorithm
-    base_quantity = "0.00000073"  # BTC owned (on account, already bought, available for trade)
-    quote_quantity = "99.00416546"  # USDT owned (on account, available for trade)
+    base_quantity = "0.00000000"  # BTC owned (on account, already bought, available for trade)
+    quote_quantity = "1000.00000000"  # USDT owned (on account, available for trade)
 
     #
     # Trader. Status data retrieved from the server. Below are examples only.
