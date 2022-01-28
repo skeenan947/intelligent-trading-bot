@@ -27,6 +27,9 @@ logging.basicConfig(
     #datefmt = '%Y-%m-%d %H:%M:%S',
 )
 
+from prometheus_client import Enum
+trade_state = Enum('trading_bot_trade_state', 'Description of enum',
+        states=['SELLING', 'SOLD', 'HOLDING', 'BUYING', 'BOUGHT'])
 
 async def main_trader_task():
     """
@@ -44,6 +47,7 @@ async def main_trader_task():
 
     status = App.status
     log.info(f"App.status: {status}")
+    trade_state.state(status)
 
     if status == "BUYING" or status == "SELLING":
         # We expect that an order was created before and now we need to check if it still exists or was executed
@@ -74,6 +78,7 @@ async def main_trader_task():
                 print(f"<=== SOLD: {order}")
                 App.status = "SOLD"
             log.info(f'New trade mode: {App.status}')
+            trade_state.state(status)
         elif order_status == ORDER_STATUS_REJECTED or order_status == ORDER_STATUS_EXPIRED or order_status == ORDER_STATUS_CANCELED:
             log.error(f"Failed to fill order with order status {order_status}")
             if status == "BUYING":
@@ -81,6 +86,7 @@ async def main_trader_task():
             elif status == "SELLING":
                 App.status = "BOUGHT"
             log.info(f'New trade mode: {App.status}')
+            trade_state.state(status)
         elif order_status == ORDER_STATUS_PENDING_CANCEL:
             return  # Currently do nothing. Check next time.
         elif order_status == ORDER_STATUS_PARTIALLY_FILLED:
@@ -118,6 +124,7 @@ async def main_trader_task():
             App.status = "SOLD"
         elif status == "SELLING":
             App.status = "BOUGHT"
+        trade_state.state(status)
 
     #
     # Trade by creating orders
@@ -157,6 +164,7 @@ async def main_trader_task():
             App.status = "SELLING"
 
     log.info(f"<=== End trade task.")
+    trade_state.state(status)
 
     return
 
@@ -196,6 +204,7 @@ async def update_trade_status():
             App.status = "SOLD"
         else:
             App.status = "BOUGHT"
+        trade_state.state(status)
 
     elif len(open_orders) == 1:
         order = open_orders[0]
@@ -206,6 +215,7 @@ async def update_trade_status():
         else:
             log.error(f"Neither SELL nor BUY side of the order {order}.")
             return None
+        trade_state.state(status)
 
     else:  # Many orders
         log.error(f"Wrong state. More than one open order. Fix manually.")
