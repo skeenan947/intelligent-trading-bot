@@ -95,6 +95,7 @@ class App:
         "telegram_chat_id": "",
 
         "symbol": "",  # BTCUSDT ETHUSDT - use config
+        "trade_precision": "2",  # How many decimals to use in trades
         "base_asset": "",  # BTC ETH
         "quote_asset": "USDT",
         "start_date": "1 Jan 2019",

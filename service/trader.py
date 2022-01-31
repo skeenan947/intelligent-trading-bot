@@ -109,6 +109,7 @@ async def main_trader_task():
     signal = App.signal
     signal_side = signal.get("side")
 
+    log.info(f"Trade status: {status}, signal_side: {signal_side}")
     # If not sold for 1 minute, then kill and then a new order will be created below if there is signal
     # Essentially, this will mean price adjustment (if a new order of the same direction will be created)
     # In future, we might kill only after some timeout
@@ -365,7 +366,7 @@ async def new_limit_order(side):
         # All available BTCs
         quantity = App.base_quantity  # BTC
 
-    quantity_str = round_down_str(quantity, 6)
+    quantity_str = round_down_str(quantity, int(App.config["trade_precision"]))
 
     #
     # Execute order
