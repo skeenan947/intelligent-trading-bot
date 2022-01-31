@@ -200,11 +200,12 @@ async def update_trade_status():
 
         usd_assets = App.quote_quantity  # USD
 
+        log.info(f"Signal: {App.signal}; Assets: {usd_assets} USD, {btc_assets_in_usd} Crypto")
         if usd_assets >= btc_assets_in_usd:
             App.status = "SOLD"
         else:
             App.status = "BOUGHT"
-        trade_state.labels(symbol).state(status)
+        trade_state.labels(symbol).state(App.status)
 
     elif len(open_orders) == 1:
         order = open_orders[0]
@@ -215,7 +216,7 @@ async def update_trade_status():
         else:
             log.error(f"Neither SELL nor BUY side of the order {order}.")
             return None
-        trade_state.labels(symbol).state(status)
+        trade_state.labels(symbol).state(App.status)
 
     else:  # Many orders
         log.error(f"Wrong state. More than one open order. Fix manually.")
